@@ -72,15 +72,12 @@
                 string requestAsString = Encoding.UTF8.GetString(bytesRead.ToArray());
                 var request = new HttpRequest(requestAsString);
 
-                string responseHtml = "<h1>Response</h1>";
+                string responseHtml = "<h1>Response</h1><h2>Subtitle</h2>";
 
-                string responseAsString = "HTTP/1.1 200 OK" + HttpConstant|s.NewLine
-                    + "Server: SUS Server" + HttpConstants.NewLine
-                    + "Content-Type: text/html" + HttpConstants.NewLine
-                    + "Content-Length: " + responseHtml.Length + HttpConstants.NewLine + HttpConstants.NewLine
-                    + responseHtml;
+                var response = new HttpResponse(HttpStatusCode.NotFound, responseHtml, "text/html");
 
-                byte[] reponseBytes = Encoding.UTF8.GetBytes(responseAsString);
+                byte[] reponseBytes = Encoding.UTF8.GetBytes(response.ToString());
+                Console.WriteLine(response);
 
                 await stream.WriteAsync(reponseBytes, 0, reponseBytes.Length);
 

@@ -4,7 +4,7 @@
 
     public class Header
     {
-        private const string HeaderSeparator = ": ";
+        private const string NameValueSeparator = ": ";
 
         public Header(string name, string value)
         {
@@ -12,10 +12,10 @@
             Value = value;
         }
 
-        public Header(string headerString)
+        public Header(string rawHeaderString)
         {
-            string[] headerArgs = headerString.Split(
-                new string[] { HeaderSeparator }, 2, StringSplitOptions.None);
+            var headerArgs = rawHeaderString.Split(
+                new[] { NameValueSeparator }, 2, StringSplitOptions.None);
 
             Name = headerArgs[0];
             Value = headerArgs[1];
@@ -27,7 +27,7 @@
 
         public override string ToString()
         {
-            return $"{Name}: {Value}";
+            return $"{Name}{NameValueSeparator}{Value}";
         }
     }
 }
