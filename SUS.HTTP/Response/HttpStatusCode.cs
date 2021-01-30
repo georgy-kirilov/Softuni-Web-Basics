@@ -1,4 +1,4 @@
-﻿namespace SUS.HTTP
+﻿namespace SUS.HTTP.Response
 {
     public enum HttpStatusCode
     {

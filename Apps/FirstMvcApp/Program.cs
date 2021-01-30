@@ -1,7 +1,10 @@
 ﻿namespace FirstMvcApp
 {
     using System;
+    using System.IO;
     using SUS.HTTP;
+    using SUS.HTTP.Request;
+    using SUS.HTTP.Response;
     using System.Threading.Tasks;
 
     public class Program
@@ -20,12 +23,16 @@
 
         static HttpResponse Home(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var response = new HttpResponse(HttpStatusCode.OK);
+            response.WriteText("Welcome to the Home Page");
+            return response;
         }
 
         static HttpResponse About(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var response = new HttpResponse(HttpStatusCode.OK);
+            response.WriteText("This is our About page", HtmlTag.LargeHeading);
+            return response;
         }
 
         static HttpResponse Login(HttpRequest request)
@@ -35,7 +42,8 @@
 
         static HttpResponse Favicon(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var response = new HttpResponse(HttpStatusCode.OK, File.ReadAllBytes("wwwroot/favicon.ico"), "image/vnd.microsoft.icon");
+            return response;
         }
     }
 }

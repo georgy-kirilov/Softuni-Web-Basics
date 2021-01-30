@@ -1,6 +1,7 @@
-﻿namespace SUS.HTTP
+﻿namespace SUS.HTTP.Response
 {
     using System.Text;
+    using SUS.HTTP.Common;
 
     public class HttpResponseBuilder
     {

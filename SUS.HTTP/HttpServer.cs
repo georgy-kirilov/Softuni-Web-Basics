@@ -1,11 +1,17 @@
 ﻿namespace SUS.HTTP
 {
+    using HttpStatusCode = Response.HttpStatusCode;
+
     using System;
     using System.Net;
     using System.Text;
     using System.Net.Sockets;
     using System.Threading.Tasks;
     using System.Collections.Generic;
+
+    using SUS.HTTP.Common;
+    using SUS.HTTP.Request;
+    using SUS.HTTP.Response;
 
     public class HttpServer
     {
@@ -71,14 +77,17 @@
                 }
 
                 string rawRequestString = Encoding.UTF8.GetString(bytesRead.ToArray());
+
                 var request = new HttpRequest(rawRequestString);
 
-                string responseHtml = "<h1>Response</h1><h2>Subtitle</h2>";
+                HttpResponse response = new HttpResponse(HttpStatusCode.NotFound);
 
-                var response = new HttpResponse(HttpStatusCode.MethodNotAllowed, responseHtml, "text/html");
+                if (routeTable.ContainsKey(request.Route))
+                {
+                    response = routeTable[request.Route].Invoke(request);
+                }
 
                 byte[] reponseBytes = Encoding.UTF8.GetBytes(response.ToString());
-                Console.WriteLine(response);
 
                 await stream.WriteAsync(reponseBytes, 0, reponseBytes.Length);
             }

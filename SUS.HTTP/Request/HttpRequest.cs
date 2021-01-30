@@ -1,8 +1,10 @@
-﻿namespace SUS.HTTP
+﻿namespace SUS.HTTP.Request
 {
     using System;
     using System.Text;
     using System.Collections.Generic;
+
+    using SUS.HTTP.Common;
 
     public class HttpRequest
     {
@@ -14,13 +16,12 @@
             string[] requestLines = rawRequestString.Split(
                 new[] { HttpConstants.NewLine }, StringSplitOptions.None);
 
-            string[] firstLineArgs = requestLines[0].Split(HttpConstants.FirstLineSeparator);
+            string[] firstLineArgs = requestLines[0].Split(HttpConstants.StatusLineSeparator);
 
             Method = (HttpMethod)Enum.Parse(
                 typeof(HttpMethod), firstLineArgs[0], ignoreCase: true);
             
             Route = firstLineArgs[1];
-
             ProtocolVersion = firstLineArgs[2];
 
             bool inHeaders = true;

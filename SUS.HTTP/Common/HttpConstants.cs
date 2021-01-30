@@ -1,4 +1,4 @@
-﻿namespace SUS.HTTP
+﻿namespace SUS.HTTP.Common
 {
     public static class HttpConstants
     {
@@ -10,6 +10,6 @@
 
         public const string RequestCookieHeaderName = "Cookie";
 
-        public const char FirstLineSeparator = ' ';
+        public const char StatusLineSeparator = ' ';
     }
 }

@@ -1,27 +1,53 @@
-﻿namespace SUS.HTTP
+﻿namespace SUS.HTTP.Response
 {
     using System;
     using System.Text;
     using System.Collections.Generic;
 
+    using SUS.HTTP.Common;
+
     public class HttpResponse
     {
+        private readonly StringBuilder bodyBuilder;
+
+        public HttpResponse(HttpStatusCode statusCode)
+            : this(statusCode, string.Empty, "text/plain")
+        {
+        }
+
+        public HttpResponse(HttpStatusCode statusCode, byte[] bodyBytes, string contentType)
+            : this(statusCode, Encoding.UTF8.GetString(bodyBytes), contentType)
+        {
+        }
+
         public HttpResponse(HttpStatusCode statusCode, string body, string contentType)
         {
             Headers = new List<Header>();
-
-            Body = body;
+            bodyBuilder = new StringBuilder(body);
             StatusCode = statusCode;
             ContentType = contentType;
         }
 
-        public string Body { get; }
+        public string Body => bodyBuilder.ToString();
 
         public HttpStatusCode StatusCode { get; }
 
-        public string ContentType { get; }
+        public string ContentType { get; private set; }
 
         public ICollection<Header> Headers { get; }
+
+        public void WriteText(string text, HtmlTag tag = HtmlTag.None)
+        {
+            if (tag != HtmlTag.None)
+            {
+                ContentType = "text/html";
+                bodyBuilder.Append($"<{tag.AsText()}>{text}</{tag.AsText()}>");
+            }
+            else
+            {
+                bodyBuilder.Append(text);
+            }
+        }
 
         public override string ToString()
         {
