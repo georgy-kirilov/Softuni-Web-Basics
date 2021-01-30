@@ -6,61 +6,40 @@
 
     public class HttpResponse
     {
-        private const string DefaultProtocolVersion = "HTTP/1.1";
-
         public HttpResponse(HttpStatusCode statusCode, string body, string contentType)
         {
-            StatusCode = statusCode;
+            Headers = new List<Header>();
+
             Body = body;
-            ProtocolVersion = DefaultProtocolVersion;
+            StatusCode = statusCode;
             ContentType = contentType;
         }
 
-        public HttpStatusCode StatusCode { get; }
-
-        public string ProtocolVersion { get; }
-
         public string Body { get; }
+
+        public HttpStatusCode StatusCode { get; }
 
         public string ContentType { get; }
 
         public ICollection<Header> Headers { get; }
 
-        private Header DateHeader 
-            => new Header("Date", DateTime.UtcNow.ToString());
-
-        private Header ServerHeader
-            => new Header("Server", "SUS Server");
-
-        private Header ContentLengthHeader
-            => new Header("Content-Length", Encoding.UTF8.GetByteCount(Body).ToString());
-
-        private Header ContentTypeHeader
-            => new Header("Content-Type", ContentType);
-
-        private string StatusLine
-            => $"{ProtocolVersion} {(int)StatusCode} {StatusCode}";
-
         public override string ToString()
         {
-            var responseBuilder = new HttpStringBuilder();
+            var responseBuilder = new HttpResponseBuilder();
 
-            var list = new object[]
-            {
-                StatusLine,
-                ContentLengthHeader,
-                DateHeader,
-                ServerHeader,
-                ContentTypeHeader,
-                HttpConstants.NewLine,
-                Body,
-            };
+            responseBuilder.AppendStatusLine(StatusCode);
 
-            foreach (object item in list)
+            responseBuilder.AppendHeader(new Header("Date", DateTime.UtcNow));
+            responseBuilder.AppendHeader(new Header("Server", "SUS Server"));
+            responseBuilder.AppendHeader(new Header("Content-Length", Encoding.UTF8.GetByteCount(Body)));
+            responseBuilder.AppendHeader(new Header("Content-Type", ContentType));
+
+            foreach (Header header in Headers)
             {
-                responseBuilder.AppendLine(item);
+                responseBuilder.AppendHeader(header);
             }
 
+            responseBuilder.AppendBody(Body);
             return responseBuilder.ToString();
         }
     }

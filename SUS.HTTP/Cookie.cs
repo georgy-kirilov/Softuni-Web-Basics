@@ -5,9 +5,9 @@
         public const string Separator = "; ";
         private const char NameValueSeparator = '=';
 
-        public Cookie(string cookieString)
+        public Cookie(string rawCookieString)
         {
-            string[] cookieArgs = cookieString.Split(NameValueSeparator);
+            string[] cookieArgs = rawCookieString.Split(NameValueSeparator);
             Name = cookieArgs[0];
             Value = cookieArgs[1];
         }

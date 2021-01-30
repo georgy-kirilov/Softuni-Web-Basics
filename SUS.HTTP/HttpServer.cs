@@ -69,19 +69,18 @@
                         bytesRead.AddRange(buffer);
                     }
                 }
-                string requestAsString = Encoding.UTF8.GetString(bytesRead.ToArray());
-                var request = new HttpRequest(requestAsString);
+
+                string rawRequestString = Encoding.UTF8.GetString(bytesRead.ToArray());
+                var request = new HttpRequest(rawRequestString);
 
                 string responseHtml = "<h1>Response</h1><h2>Subtitle</h2>";
 
-                var response = new HttpResponse(HttpStatusCode.NotFound, responseHtml, "text/html");
+                var response = new HttpResponse(HttpStatusCode.MethodNotAllowed, responseHtml, "text/html");
 
                 byte[] reponseBytes = Encoding.UTF8.GetBytes(response.ToString());
                 Console.WriteLine(response);
 
                 await stream.WriteAsync(reponseBytes, 0, reponseBytes.Length);
-
-                Console.WriteLine();
             }
         }
     }

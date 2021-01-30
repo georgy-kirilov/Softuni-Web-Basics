@@ -6,10 +6,10 @@
     {
         private const string NameValueSeparator = ": ";
 
-        public Header(string name, string value)
+        public Header(string name, object value)
         {
             Name = name;
-            Value = value;
+            Value = value.ToString();
         }
 
         public Header(string rawHeaderString)
