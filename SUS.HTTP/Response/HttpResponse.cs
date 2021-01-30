@@ -8,46 +8,27 @@
 
     public class HttpResponse
     {
-        private readonly StringBuilder bodyBuilder;
-
-        public HttpResponse(HttpStatusCode statusCode)
-            : this(statusCode, string.Empty, "text/plain")
+        public HttpResponse(string body, string contentType, HttpStatusCode statusCode = HttpStatusCode.OK)
+            : this(Encoding.UTF8.GetBytes(body), contentType, statusCode)
         {
         }
 
-        public HttpResponse(HttpStatusCode statusCode, byte[] bodyBytes, string contentType)
-            : this(statusCode, Encoding.UTF8.GetString(bodyBytes), contentType)
-        {
-        }
-
-        public HttpResponse(HttpStatusCode statusCode, string body, string contentType)
+        public HttpResponse(byte[] body, string contentType, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             Headers = new List<Header>();
-            bodyBuilder = new StringBuilder(body);
+
+            Body = body ?? new byte[0];
+            ContentType = contentType ?? "text/plain";
             StatusCode = statusCode;
-            ContentType = contentType;
         }
 
-        public string Body => bodyBuilder.ToString();
-
-        public HttpStatusCode StatusCode { get; }
+        public byte[] Body { get; set; }
 
         public string ContentType { get; private set; }
 
-        public ICollection<Header> Headers { get; }
+        public HttpStatusCode StatusCode { get; }
 
-        public void WriteText(string text, HtmlTag tag = HtmlTag.None)
-        {
-            if (tag != HtmlTag.None)
-            {
-                ContentType = "text/html";
-                bodyBuilder.Append($"<{tag.AsText()}>{text}</{tag.AsText()}>");
-            }
-            else
-            {
-                bodyBuilder.Append(text);
-            }
-        }
+        public ICollection<Header> Headers { get; }
 
         public override string ToString()
         {
@@ -57,7 +38,7 @@
 
             responseBuilder.AppendHeader(new Header("Date", DateTime.UtcNow));
             responseBuilder.AppendHeader(new Header("Server", "SUS Server"));
-            responseBuilder.AppendHeader(new Header("Content-Length", Encoding.UTF8.GetByteCount(Body)));
+            responseBuilder.AppendHeader(new Header("Content-Length", Body.Length));
             responseBuilder.AppendHeader(new Header("Content-Type", ContentType));
 
             foreach (Header header in Headers)
@@ -65,7 +46,7 @@
                 responseBuilder.AppendHeader(header);
             }
 
-            responseBuilder.AppendBody(Body);
+            responseBuilder.AppendLine();
             return responseBuilder.ToString();
         }
     }

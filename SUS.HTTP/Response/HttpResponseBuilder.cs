@@ -22,10 +22,9 @@
             AppendLine(header);
         }
 
-        public void AppendBody(string body)
+        public void AppendLine()
         {
             AppendLine(string.Empty);
-            AppendLine(body);
         }
 
         private void AppendLine(object value)

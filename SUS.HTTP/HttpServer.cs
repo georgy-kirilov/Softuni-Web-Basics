@@ -80,16 +80,18 @@
 
                 var request = new HttpRequest(rawRequestString);
 
-                HttpResponse response = new HttpResponse(HttpStatusCode.NotFound);
+                HttpResponse response = new HttpResponse(string.Empty, null);
 
                 if (routeTable.ContainsKey(request.Route))
                 {
-                    response = routeTable[request.Route].Invoke(request);
+                    var action = routeTable[request.Route];
+                    response = action(request);
                 }
 
-                byte[] reponseBytes = Encoding.UTF8.GetBytes(response.ToString());
+                byte[] responseHeadersBytes = Encoding.UTF8.GetBytes(response.ToString());
 
-                await stream.WriteAsync(reponseBytes, 0, reponseBytes.Length);
+                await stream.WriteAsync(responseHeadersBytes, 0, responseHeadersBytes.Length);
+                await stream.WriteAsync(response.Body, 0, response.Body.Length);
             }
         }
     }

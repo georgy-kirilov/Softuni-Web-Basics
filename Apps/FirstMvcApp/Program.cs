@@ -9,6 +9,11 @@
 
     public class Program
     {
+        const string PageCss = "<style>" +
+            "body {" +
+            "margin: 50px;" +
+            "}</style>";
+
         public static async Task Main(string[] args)
         {
             var server = new HttpServer();
@@ -23,27 +28,28 @@
 
         static HttpResponse Home(HttpRequest request)
         {
-            var response = new HttpResponse(HttpStatusCode.OK);
-            response.WriteText("Welcome to the Home Page");
-            return response;
+            return new HttpResponse("<h1>Welcome to the Home page</h1>", "text/html");
         }
 
         static HttpResponse About(HttpRequest request)
         {
-            var response = new HttpResponse(HttpStatusCode.OK);
-            response.WriteText("This is our About page", HtmlTag.LargeHeading);
-            return response;
+            return new HttpResponse("<h1>Welcome to the About page</h1>", "text/html");
         }
 
         static HttpResponse Login(HttpRequest request)
         {
-            throw new NotImplementedException();
+            string content = "<h1>Login</h1><form method=\"POST\"> " +
+                "Username <input/> <br/> <br/>" +
+                "Password   <input type=\"password\"/> <br/> <br/>" +
+                "<input type=\"submit\" value=\"Send\"/>" +
+                "</form>" + PageCss;
+
+            return new HttpResponse(content, "text/html");
         }
 
         static HttpResponse Favicon(HttpRequest request)
         {
-            var response = new HttpResponse(HttpStatusCode.OK, File.ReadAllBytes("wwwroot/favicon.ico"), "image/vnd.microsoft.icon");
-            return response;
+            return new HttpResponse(File.ReadAllBytes("wwwroot/favicon.ico"), "image/vnd.microsoft.icon");
         }
     }
 }
