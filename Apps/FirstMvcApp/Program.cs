@@ -6,6 +6,7 @@
     using SUS.HTTP.Request;
     using SUS.HTTP.Response;
     using System.Threading.Tasks;
+    using SUS.HTTP.Common;
 
     public class Program
     {
@@ -28,12 +29,12 @@
 
         static HttpResponse Home(HttpRequest request)
         {
-            return new HttpResponse("<h1>Welcome to the Home page</h1>", "text/html");
+            return new HttpResponse("<h1>Welcome to the Home page</h1>", HttpContentType.Html);
         }
 
         static HttpResponse About(HttpRequest request)
         {
-            return new HttpResponse("<h1>Welcome to the About page</h1>", "text/html");
+            return new HttpResponse("<h1>Welcome to the About page</h1>", HttpContentType.Html);
         }
 
         static HttpResponse Login(HttpRequest request)
@@ -44,12 +45,12 @@
                 "<input type=\"submit\" value=\"Send\"/>" +
                 "</form>" + PageCss;
 
-            return new HttpResponse(content, "text/html");
+            return new HttpResponse(content, HttpContentType.Html);
         }
 
         static HttpResponse Favicon(HttpRequest request)
         {
-            return new HttpResponse(File.ReadAllBytes("wwwroot/favicon.ico"), "image/vnd.microsoft.icon");
+            return new HttpResponse(File.ReadAllBytes("wwwroot/favicon.ico"), HttpContentType.Ico);
         }
     }
 }

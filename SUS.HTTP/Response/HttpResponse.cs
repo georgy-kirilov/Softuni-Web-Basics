@@ -18,7 +18,7 @@
             Headers = new List<Header>();
 
             Body = body ?? new byte[0];
-            ContentType = contentType ?? "text/plain";
+            ContentType = contentType ?? HttpContentType.Plain;
             StatusCode = statusCode;
         }
 
