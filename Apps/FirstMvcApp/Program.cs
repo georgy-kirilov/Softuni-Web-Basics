@@ -7,10 +7,11 @@
     using SUS.HTTP.Response;
     using System.Threading.Tasks;
     using SUS.HTTP.Common;
+    using FirstMvcApp.Controllers;
 
     public class Program
     {
-        const string PageCss = "<style>" +
+        const string PageCss = "<style>" +  
             "body {" +
             "margin: 50px;" +
             "}</style>";
@@ -19,7 +20,7 @@
         {
             var server = new HttpServer();
 
-            server.AddRoute("/", Home);
+            server.AddRoute("/home", new HomeController().Index);
             server.AddRoute("/about", About);
             server.AddRoute("/login", Login);
             server.AddRoute("/favicon.ico", Favicon);

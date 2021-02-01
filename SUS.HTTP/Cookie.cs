@@ -3,11 +3,10 @@
     public class Cookie
     {
         public const string Separator = "; ";
-        private const char NameValueSeparator = '=';
 
         public Cookie(string rawCookieString)
         {
-            string[] cookieArgs = rawCookieString.Split(NameValueSeparator);
+            string[] cookieArgs = rawCookieString.Split('=');
             Name = cookieArgs[0];
             Value = cookieArgs[1];
         }

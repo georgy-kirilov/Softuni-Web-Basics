@@ -1,9 +1,8 @@
 ﻿namespace SUS.HTTP
 {
-    using HttpStatusCode = Response.HttpStatusCode;
-
     using System;
     using System.Net;
+    using System.Linq;
     using System.Text;
     using System.Net.Sockets;
     using System.Threading.Tasks;
@@ -15,26 +14,11 @@
 
     public class HttpServer
     {
-        private readonly IDictionary<string, Func<HttpRequest, HttpResponse>> routeTable;
+        private readonly RouteTable routeTable;
 
         public HttpServer()
         {
-            routeTable = new Dictionary<string, Func<HttpRequest, HttpResponse>>();
-        }
-
-        public void AddRoute(string route, Func<HttpRequest, HttpResponse> action)
-        {
-            if (routeTable.ContainsKey(route))
-            {
-                throw new ArgumentException("Route already exists");
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            routeTable.Add(route, action);
+            routeTable = new RouteTable();
         }
 
         public async Task StartAsync(int port)
@@ -81,6 +65,8 @@
                 var request = new HttpRequest(rawRequestString);
 
                 HttpResponse response = new HttpResponse(string.Empty, null);
+
+                routeTable.Routes.
 
                 if (routeTable.ContainsKey(request.Route))
                 {
